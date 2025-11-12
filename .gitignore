@@ -1,0 +1,7 @@
+public/images/*
+node_modules
+dist
+config.json
+github-data.json
+.directory
+.env
