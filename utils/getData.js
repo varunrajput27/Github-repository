@@ -31,6 +31,24 @@ async function getImage(pathOrUrl) {
   }
 }
 
+// function renderREADME(readmeData) {
+//   const md = markdownit({
+//     html: true,
+//     breaks: true,
+//     linkify: true,
+//     typographer: true,
+//   });
+
+//   let mdProfileREADME = md.render(readmeData);
+//   // Append '?raw=true' to images hosted on GitHub
+//   mdProfileREADME = mdProfileREADME.replace(
+//     /\b(https:\/\/github\.com\/\S+(?:png|jpe?g|gif))\b/gim,
+//     "$&" + "?raw=true"
+//   );
+
+//   return mdProfileREADME;
+// }
+
 function renderREADME(readmeData) {
   const md = markdownit({
     html: true,
@@ -40,14 +58,18 @@ function renderREADME(readmeData) {
   });
 
   let mdProfileREADME = md.render(readmeData);
-  // Append '?raw=true' to images hosted on GitHub
+
+  // 🛠️ Fix GitHub image links so that they render properly
+  // Converts: https://github.com/user/repo/blob/main/image.png
+  // To:       https://raw.githubusercontent.com/user/repo/main/image.png
   mdProfileREADME = mdProfileREADME.replace(
-    /\b(https:\/\/github\.com\/\S+(?:png|jpe?g|gif))\b/gim,
-    "$&" + "?raw=true"
+    /https:\/\/github\.com\/([^\/]+)\/([^\/]+)\/blob\/([^"\s)]+)/g,
+    "https://raw.githubusercontent.com/$1/$2/$3"
   );
 
   return mdProfileREADME;
 }
+
 
 function getRepos(x, y) {
   const repos = x.concat(y);
